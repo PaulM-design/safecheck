@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SafeCheck authorized web security posture scanner">
+  <title>SafeCheck — Security posture scanner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="SafeCheck home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6.2v5.4c0 4.7 3.1 8 7.5 9.4 4.4-1.4 7.5-4.7 7.5-9.4V6.2L12 3Z"/><path d="m8.8 12 2.1 2.1 4.4-4.5"/></svg></span>
+      <span>SafeCheck</span><span class="version">v0.1</span>
+    </a>
+    <nav><a href="/docs">API docs</a><span class="status"><i></i> Local service</span></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span>AUTHORIZED ASSESSMENTS ONLY</span></div>
+      <h1>See your security posture<br><em>before attackers do.</em></h1>
+      <p>Fast, bounded checks for web headers, TLS, OWASP misconfigurations, CMS extensions, directory exposure, and authentication controls.</p>
+    </section>
+
+    <section class="scan-panel" aria-labelledby="scan-heading">
+      <div class="panel-heading"><div><span class="step">01</span><h2 id="scan-heading">Start a scan</h2></div><span class="passive-tag">Non-invasive</span></div>
+      <form id="scan-form">
+        <label for="target">Target URL</label>
+        <div class="url-row"><div class="input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg><input id="target" name="target" type="url" placeholder="https://example.com" value="https://example.com" required autocomplete="url"></div><button id="scan-button" type="submit"><span>Run security scan</span><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>
+        <div class="options">
+          <label class="check"><input id="authorized" type="checkbox" required><span></span><b>I own this target or have explicit permission to assess it</b></label>
+          <label class="toggle"><input id="use-llm" type="checkbox"><span></span><b>AI summary</b></label>
+        </div>
+        <p id="form-error" class="form-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="scanning" class="scanning hidden" aria-live="polite">
+      <div class="radar"><i></i><b></b><span></span><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6.2v5.4c0 4.7 3.1 8 7.5 9.4 4.4-1.4 7.5-4.7 7.5-9.4V6.2L12 3Z"/></svg></div>
+      <h2>Assessing target</h2><p id="scan-status">Validating target and security headers…</p>
+      <div class="progress"><span></span></div>
+    </section>
+
+    <section id="results" class="results hidden" aria-live="polite">
+      <div class="results-head"><div><span class="step">02</span><div><h2>Security report</h2><p id="result-target"></p></div></div><button id="export-button" class="ghost-button"><svg viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M5 20h14"/></svg> Export JSON</button></div>
+      <div class="overview-grid">
+        <article class="score-card"><div class="score-ring"><svg viewBox="0 0 120 120"><circle class="track" cx="60" cy="60" r="52"/><circle id="score-arc" class="arc" cx="60" cy="60" r="52"/></svg><div><strong id="score">0</strong><span>/ 100</span></div></div><div><span class="label">Overall risk</span><h3 id="risk-level">Low</h3><p>Deterministic score based on severity-weighted observations.</p></div></article>
+        <article class="summary-card"><div class="card-label"><span>Executive summary</span><i id="ai-badge" class="hidden">AI enhanced</i></div><p id="summary"></p><div class="meta"><span><b id="request-count">0</b> requests</span><span><b id="finding-count">0</b> observations</span></div></article>
+      </div>
+      <div id="severity-grid" class="severity-grid"></div>
+      <div class="findings-head"><div><h2>Findings</h2><span id="visible-count"></span></div><div id="filters" class="filters"></div></div>
+      <div id="findings" class="findings"></div>
+    </section>
+
+    <section class="trust-grid">
+      <article><span>01</span><svg viewBox="0 0 24 24"><path d="M4 17 10 11l4 4 6-8"/><path d="M15 7h5v5"/></svg><h3>Bounded by design</h3><p>Strict request budgets, low concurrency, and no recursive crawling.</p></article>
+      <article><span>02</span><svg viewBox="0 0 24 24"><path d="M12 3 4.5 6.2v5.4c0 4.7 3.1 8 7.5 9.4 4.4-1.4 7.5-4.7 7.5-9.4V6.2L12 3Z"/></svg><h3>Safe target controls</h3><p>Private networks, unusual ports, and cross-host redirects are blocked.</p></article>
+      <article><span>03</span><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><h3>Actionable reports</h3><p>Evidence, OWASP mapping, severity, and clear remediation in every finding.</p></article>
+    </section>
+  </main>
+  <footer><span>SafeCheck</span><p>Defensive security tooling for systems you are authorized to assess.</p><a href="/health">Service health</a></footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

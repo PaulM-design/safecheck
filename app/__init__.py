@@ -1,0 +1,2 @@
+"""SafeCheck application package."""
+
