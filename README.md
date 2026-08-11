@@ -1,38 +1,28 @@
-# SafeCheck
+SafeCheck is a lightweight FastAPI-based security posture scanner designed for authorized, non‑invasive assessments of websites and web applications. It focuses on practical, observable security signals and avoids intrusive or unsafe scanning techniques.
 
-A lightweight FastAPI service for **authorized, non-invasive** website security posture checks. It inspects response headers, cookies, TLS certificate/protocol negotiation, common OWASP configuration issues, CMS extension versions exposed in public asset URLs, directory-listing signatures, and visible login rate-limit signals.
+SafeCheck is ideal for:
 
-It does **not** brute-force credentials, exploit vulnerabilities, recursively crawl, enumerate directories, or claim that a detected version is vulnerable without an authoritative advisory comparison.
+Developers wanting quick security feedback
 
-## Run
+Security-conscious teams integrating checks into CI/CD
 
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -e ".[dev]"
-uvicorn app.main:app --reload
-```
+Consultants performing authorized posture reviews
 
-Open `http://127.0.0.1:8000/docs`, or:
+Anyone needing a safe, deterministic, OWASP‑aligned scanner
 
-```powershell
-Invoke-RestMethod http://127.0.0.1:8000/scan -Method Post -ContentType application/json -Body '{"target":"https://example.com","authorized":true,"use_llm":false}'
-```
+Features
+SafeCheck performs a curated set of non-invasive checks, including:
 
-To enable the optional narrative summary, copy `.env.example` to `.env` and configure an OpenAI-compatible chat-completions endpoint. Risk scores and findings are deterministic; the LLM only rewrites the supplied findings into a short summary.
+Security Headers & Cookies
+Missing or weak security headers
 
-## Safety and interpretation
+Cookie flags (Secure, HttpOnly, SameSite)
 
-- Scan only systems you own or have explicit written permission to assess.
-- Private, loopback, link-local, reserved, credential-bearing URLs, unusual ports, mixed DNS answers, and cross-host redirects are rejected to reduce SSRF risk.
-- Each scan has a small fixed request budget and low connection concurrency.
-- “No visible brute-force protection” is an observation, not proof: server-side controls may be invisible.
-- Public CMS version strings are inventory clues. Confirm versions and consult vendor advisories before assigning vulnerability status.
-- Run behind authentication and rate limiting before exposing this API to other users.
+CORS configuration signals
 
-## Tests
+TLS & Protocol Negotiation
+Certificate validity
 
-```powershell
-pytest
-ruff check .
-```
+Protocol negotiation details
+
+Basic HTTPS hygiene
